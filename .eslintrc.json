@@ -5,6 +5,7 @@
         "space-before-blocks": false
     },
     "rules": {
-        "@typescript-eslint/space-before-blocks": "off"
+        "@typescript-eslint/space-before-blocks": "off",
+        "@typescript-eslint/strict-boolean-expressions": "off"
     }
 }
