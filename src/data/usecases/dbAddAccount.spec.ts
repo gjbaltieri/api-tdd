@@ -1,9 +1,19 @@
-import { Encrypter } from './db-add-account-protocols'
+import { AccountModel, AddAccount, AddAccountModel, Encrypter, AddAccountRepository } from './db-add-account-protocols'
 import { DbAddAccount } from './dbAddAccount'
 
-interface SutTypes {
-  sut: DbAddAccount
-  encrypterStub: Encrypter
+const makeDBAddAccountRepository = (): AddAccountRepository => {
+  class AddAccountRepositoryStub implements AddAccount {
+    async add (account: AddAccountModel): Promise<AccountModel> {
+      const fakeAccount = {
+        id: 'valid_id',
+        name: 'valid_name',
+        email: 'valid_email@mail.com',
+        password: 'hashad_password'
+      }
+      return new Promise(resolve => resolve(fakeAccount))
+    }
+  }
+  return new AddAccountRepositoryStub()
 }
 const makeEncrypter = (): Encrypter => {
   class EncryptStub implements Encrypter {
@@ -13,11 +23,19 @@ const makeEncrypter = (): Encrypter => {
   }
   return new EncryptStub()
 }
+
+interface SutTypes {
+  sut: DbAddAccount
+  encrypterStub: Encrypter
+  addAccountRepositoryStub: AddAccount
+}
+
 const makeSut = (): SutTypes => {
   const encrypterStub = makeEncrypter()
-  const sut = new DbAddAccount(encrypterStub)
+  const addAccountRepositoryStub = makeDBAddAccountRepository()
+  const sut = new DbAddAccount(encrypterStub, addAccountRepositoryStub)
 
-  return { sut, encrypterStub }
+  return { sut, encrypterStub, addAccountRepositoryStub }
 }
 
 describe('DbAddAccount usecase', () => {
@@ -43,5 +61,21 @@ describe('DbAddAccount usecase', () => {
     }
     const promise = sut.add(accountData)
     await expect(promise).rejects.toThrow()
+  })
+
+  test('Should call AddAccountRepository with corrects values', async () => {
+    const { sut, addAccountRepositoryStub } = makeSut()
+    const addSpy = jest.spyOn(addAccountRepositoryStub, 'add')
+    const accountData = {
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'valid_password'
+    }
+    await sut.add(accountData)
+    expect(addSpy).toHaveBeenCalledWith({
+      name: 'valid_name',
+      email: 'valid_email@mail.com',
+      password: 'hashad_password'
+    })
   })
 })
