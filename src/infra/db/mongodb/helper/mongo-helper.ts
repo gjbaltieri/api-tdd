@@ -15,10 +15,7 @@ export const MongoHelper = {
   },
 
   map (id: string, collection: any): any {
-    const { name, email, password } = collection
-    const collectionWithId = {
-      id, name, email, password
-    }
-    return collectionWithId
+    const { _id, ...collectionWithouId } = collection
+    return Object.assign({}, collectionWithouId, { id })
   }
 }
