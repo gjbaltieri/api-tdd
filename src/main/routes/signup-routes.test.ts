@@ -14,7 +14,11 @@ describe('SignUp route', () => {
     await collection.deleteMany({})
   })
   test('should return an account on sucess', async () => {
-    await request(app).post('/api/signup').send()
-      .expect(200)
+    await request(app).post('/api/signup').send({
+      name: 'teste',
+      email: 'email@mail.com',
+      password: 'validPassword',
+      passwordConfirmation: 'validPassword'
+    }).expect(200)
   })
 })
