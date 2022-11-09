@@ -8,8 +8,10 @@ describe.only('Mongo Helper Connect', () => {
     await sut.disconnect()
   })
   test('should reconnect if mongodb is down', async () => {
+    let getCollection = await sut.getCollection('jest-test')
+    expect(getCollection).toBeTruthy()
     await sut.disconnect()
-    const getCollection = sut.getCollection('jest-test')
+    getCollection = await sut.getCollection('jest-test')
     expect(getCollection).toBeTruthy()
   })
 })
