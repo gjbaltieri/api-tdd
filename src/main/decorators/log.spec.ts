@@ -37,13 +37,13 @@ const makeController = (): Controller => {
 }
 
 const makeLogErrorRepository = (): LogErrorRepository => {
-  class ControllerStub implements LogErrorRepository {
-    async log(stack: string): Promise<void> {
+  class LogErrorRepositoryStub implements LogErrorRepository {
+    async logError(stack: string): Promise<void> {
       return new Promise((resolve) => resolve(null))
     }
   }
-  const controllerStub = new ControllerStub()
-  return controllerStub
+  const logErrorRepositoryStub = new LogErrorRepositoryStub()
+  return logErrorRepositoryStub
 }
 
 interface IMakeSut {
@@ -81,7 +81,7 @@ describe('Log Decorator', () => {
     const { sut, controllerStub, logErrorRepositoryStub } = makeSut()
     const error = makeServerError()
     jest.spyOn(controllerStub, 'handle').mockReturnValueOnce(new Promise((resolve) => resolve(error)))
-    const logErrorSpy = jest.spyOn(logErrorRepositoryStub, 'log')
+    const logErrorSpy = jest.spyOn(logErrorRepositoryStub, 'logError')
     await sut.handle(makeHttpRequest())
     expect(logErrorSpy).toHaveBeenCalledWith('any_stack')
   })
