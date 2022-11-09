@@ -7,12 +7,13 @@ describe('SignUp route', () => {
     await MongoHelper.connect(process.env.MONGO_URL)
   })
   afterAll(async () => {
-    await MongoHelper.disconnect()
+    return await MongoHelper.disconnect()
   })
   beforeEach(async () => {
-    const collection = await MongoHelper.getCollection('accounts')
+    const collection = await MongoHelper.getCollection('jest-test')
     await collection.deleteMany({})
   })
+
   test('should return an account on sucess', async () => {
     await request(app).post('/api/signup').send({
       name: 'teste',
