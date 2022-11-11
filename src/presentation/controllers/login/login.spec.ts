@@ -18,7 +18,7 @@ const makeHttpRequest = (): HttpRequest => ({
 })
 const makeAuthentication = (): Authentication => {
   class AuthenticationStub implements Authentication {
-    async auth(params: AuthenticationModel): Promise<string> {
+    async auth(authentication: AuthenticationModel): Promise<string> {
       return new Promise((resolve) => resolve('any_token'))
     }
   }
