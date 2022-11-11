@@ -1,9 +1,7 @@
 import { InvalidParamError, MissingParamError } from '../../errors'
 import { badRequest, ok, serverError, unauthorized } from '../../helper/http-helper'
-import { Controller, HttpRequest } from '../../protocols'
-import { EmailValidator } from '../signup/signup-protocols'
 import { LoginController } from './login'
-import { Authentication, AuthenticationModel } from '../../../domain/usecases/authentication'
+import { Controller, HttpRequest, AuthenticationModel, EmailValidator, Authentication } from './login-protocols'
 
 const makeHttpRequest = (): HttpRequest => ({
   body: {
