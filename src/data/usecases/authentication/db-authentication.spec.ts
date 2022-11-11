@@ -33,4 +33,13 @@ describe('Db-authentication Use case', () => {
     await sut.auth({ email: 'any_email@mail.com', password: 'any_password' })
     expect(loadSpy).toHaveBeenCalledWith('any_email@mail.com')
   })
+
+  test('should call LoadAccountByEmailRepository with correct email', async () => {
+    const { sut, loadAccountByEmailRepositoryStub } = makeSut()
+    jest
+      .spyOn(loadAccountByEmailRepositoryStub, 'load')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.auth({ email: 'any_email@mail.com', password: 'any_password' })
+    await expect(promise).rejects.toThrow()
+  })
 })
