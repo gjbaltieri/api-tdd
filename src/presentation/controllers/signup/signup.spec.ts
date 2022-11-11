@@ -2,6 +2,7 @@ import { AddAccount, AddAccountModel, AccountModel, HttpRequest } from './signup
 import { ServerError } from '../../errors'
 import { SignUpController } from './signup'
 import { Validation } from '../../helper/validators/validation'
+import { badRequest } from '../../helper/http-helper'
 
 const makeFakeHttpRequest = (): HttpRequest => ({
   body: {
@@ -90,11 +91,11 @@ describe('SignUp Controller', () => {
     expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
   })
 
-  test('should SignUpController calls Validation CompareParams with correct params', async () => {
+  test('should SignUpController return 400 if Validation fails', async () => {
     const { sut, validationStub } = makeSut()
-    const validateSpy = jest.spyOn(validationStub, 'validate')
+    jest.spyOn(validationStub, 'validate').mockReturnValueOnce(new Error())
     const httpRequest = makeFakeHttpRequest()
-    await sut.handle(httpRequest)
-    expect(validateSpy).toHaveBeenCalledWith(httpRequest.body)
+    const httpReponse = await sut.handle(httpRequest)
+    expect(httpReponse).toEqual(badRequest(new Error()))
   })
 })
