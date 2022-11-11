@@ -7,4 +7,10 @@ describe('RequiredField Validation', () => {
     const error = fieldValidation.validate({ anotherField: 'another_field' })
     expect(error).toEqual(new MissingParamError('expect_field'))
   })
+
+  test('should not return if validation sucess', () => {
+    const fieldValidation = new RequiredFieldValidation('expect_field')
+    const error = fieldValidation.validate({ anotherField: 'another_field' })
+    expect(error).toEqual(new MissingParamError('expect_field'))
+  })
 })
