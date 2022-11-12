@@ -102,4 +102,13 @@ describe('Db-authentication Use case', () => {
     await sut.auth({ email: 'any_email@mail.com', password: 'hashad_password' })
     expect(generateSpy).toHaveBeenCalledWith('any_id')
   })
+
+  test('should DbAuthentication throw if TokenGenerator thorws', async () => {
+    const { sut, tokenGeneratorStub } = makeSut()
+    jest
+      .spyOn(tokenGeneratorStub, 'generate')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const acessToken = sut.auth({ email: 'any_email@mail.com', password: 'hashad_password' })
+    await expect(acessToken).rejects.toThrow()
+  })
 })
