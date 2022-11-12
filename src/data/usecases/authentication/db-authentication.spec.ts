@@ -111,4 +111,10 @@ describe('Db-authentication Use case', () => {
     const acessToken = sut.auth({ email: 'any_email@mail.com', password: 'hashad_password' })
     await expect(acessToken).rejects.toThrow()
   })
+
+  test('should return a token if TokenGenerator sucess', async () => {
+    const { sut } = makeSut()
+    const acessToken = await sut.auth({ email: 'any_email@mail.com', password: 'hashad_password' })
+    expect(acessToken).toEqual('any_token')
+  })
 })
