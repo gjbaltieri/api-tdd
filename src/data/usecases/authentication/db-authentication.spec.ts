@@ -147,4 +147,13 @@ describe('Db-authentication Use case', () => {
     await sut.auth({ email: 'any_email@mail.com', password: 'hashad_password' })
     expect(updateAcessTokenSpy).toHaveBeenCalledWith('any_id', 'any_token')
   })
+
+  test('should DbAuthentication throw if UpdateAcessTokenRepository throws', async () => {
+    const { sut, updateAcessTokenRepositoryStub } = makeSut()
+    jest
+      .spyOn(updateAcessTokenRepositoryStub, 'update')
+      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    const promise = sut.auth({ email: 'any_email@mail.com', password: 'any_passwords' })
+    await expect(promise).rejects.toThrow()
+  })
 })
