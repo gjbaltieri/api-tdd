@@ -105,7 +105,7 @@ describe('Db-authentication Use case', () => {
     const { sut, hashComparerStub } = makeSut()
     const hashSpy = jest.spyOn(hashComparerStub, 'compare')
     await sut.auth({ email: 'any_email@mail.com', password: 'any_password' })
-    expect(hashSpy).toHaveBeenCalledWith({ password: 'any_password', hash: 'hashad_password' })
+    expect(hashSpy).toHaveBeenCalledWith({ value: 'any_password', hashedValue: 'hashad_password' })
   })
 
   test('should DbAuthentication throw if HashComparer throws', async () => {
@@ -136,7 +136,7 @@ describe('Db-authentication Use case', () => {
     await expect(acessToken).rejects.toThrow()
   })
 
-  test('should return a token if TokenGenerator sucess', async () => {
+  test('should return a token if Encrypter sucess', async () => {
     const { sut } = makeSut()
     const acessToken = await sut.auth({ email: 'any_email@mail.com', password: 'hashad_password' })
     expect(acessToken).toEqual('any_token')
