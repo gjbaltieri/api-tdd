@@ -1,6 +1,6 @@
 export interface HashComparerModel {
-  password: string
-  hash: string
+  value: string
+  hashedValue: string
 }
 
 export interface HashComparer {
