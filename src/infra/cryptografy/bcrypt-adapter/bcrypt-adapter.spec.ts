@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/indent */
 import { BcryptAdapter } from './bcrypt-adapter'
 import bcrypt from 'bcrypt'
-import { HashComparerModel } from '../../data/protocols/cryptografy/hash-comparer'
+import { HashComparerModel } from '../../../data/protocols/cryptografy/hash-comparer'
 
 jest.mock('bcrypt', () => ({
   async hash(): Promise<string> {
