@@ -37,22 +37,37 @@ describe('Account mongodb repository', () => {
   test('should return account on loadAccountByEmail sucess', async () => {
     const sut = makeSut()
     await collection.insertOne({
-      name: 'mock_name',
-      email: 'mock_email@mail.com',
-      password: 'mock_password'
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
     })
-    const account = await sut.loadByEmail('mock_email@mail.com')
+    const account = await sut.loadByEmail('any_email@mail.com')
     expect(account).toBeTruthy()
     expect(account).toHaveProperty('id')
     expect(account.id).toBeTruthy()
-    expect(account.name).toBe('mock_name')
-    expect(account.email).toBe('mock_email@mail.com')
-    expect(account.password).toBe('mock_password')
+    expect(account.name).toBe('any_name')
+    expect(account.email).toBe('any_email@mail.com')
+    expect(account.password).toBe('any_password')
   })
 
   test('should return null if loadAccountByEmail return null', async () => {
     const sut = makeSut()
     const account = await sut.loadByEmail('any_email@mail.com')
     expect(account).toBe(null)
+  })
+
+  test('should update the account acessToken if UpdateAcessTokenRepository sucess', async () => {
+    const sut = makeSut()
+    const accountInsertReturn = await collection.insertOne({
+      name: 'any_name',
+      email: 'any_email@mail.com',
+      password: 'any_password'
+    })
+    const id = accountInsertReturn.insertedId.toString()
+    await sut.updateAcessToken(id, 'any_token')
+    const accountUpdated = await collection.findOne({ _id: MongoHelper.idToObjectId(id) })
+    expect(accountUpdated).toBeTruthy()
+    expect(accountUpdated).toHaveProperty('acessToken')
+    expect(accountUpdated.acessToken).toBe('any_token')
   })
 })
