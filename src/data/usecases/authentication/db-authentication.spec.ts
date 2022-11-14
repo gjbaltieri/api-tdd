@@ -63,12 +63,7 @@ const makeSut = (): SutTypes => {
   const hashComparerStub = makeHashComparer()
   const encrypterStub = makeEncrypter()
   const updateAcessTokenRepositoryStub = makeUpdateAcessTokenRepository()
-  const sut = new DbAuthentication(
-    loadAccountByEmailRepositoryStub,
-    hashComparerStub,
-    encrypterStub,
-    updateAcessTokenRepositoryStub
-  )
+  const sut = new DbAuthentication(loadAccountByEmailRepositoryStub, hashComparerStub, encrypterStub, updateAcessTokenRepositoryStub)
   return {
     sut,
     loadAccountByEmailRepositoryStub,
@@ -87,9 +82,7 @@ describe('Db-authentication Use case', () => {
 
   test('should DbAuthentication throw if LoadAccountByEmailRepository throws', async () => {
     const { sut, loadAccountByEmailRepositoryStub } = makeSut()
-    jest
-      .spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail')
-      .mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
+    jest.spyOn(loadAccountByEmailRepositoryStub, 'loadByEmail').mockReturnValueOnce(new Promise((resolve, reject) => reject(new Error())))
     const promise = sut.auth({ email: 'any_email@mail.com', password: 'any_password' })
     await expect(promise).rejects.toThrow()
   })
