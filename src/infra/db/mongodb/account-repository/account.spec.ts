@@ -49,4 +49,10 @@ describe('Account mongodb repository', () => {
     expect(account.email).toBe('mock_email@mail.com')
     expect(account.password).toBe('mock_password')
   })
+
+  test('should return null if loadAccountByEmail return null', async () => {
+    const sut = makeSut()
+    const account = await sut.loadByEmail('any_email@mail.com')
+    expect(account).toBe(null)
+  })
 })
