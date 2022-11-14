@@ -1,6 +1,6 @@
 import { Validation } from '../../../presentation/protocols/validation'
 import { EmailValidator } from '../../../presentation/protocols/email-validator'
-import { makeSignUpValidation } from './login-validation'
+import { makeLoginValidation } from './login-validation'
 import { EmailValidation, RequiredFieldValidation, ValidationComposite } from '../../../presentation/helper/validators'
 
 jest.mock('../../../presentation/helper/validators/validation-composite')
@@ -17,7 +17,7 @@ describe('login Validator', () => {
       validations.push(new RequiredFieldValidation(field))
     }
     validations.push(new EmailValidation('email', new EmailValidatorStub()))
-    makeSignUpValidation()
+    makeLoginValidation()
     expect(ValidationComposite).toHaveBeenCalledWith(validations)
   })
 })
